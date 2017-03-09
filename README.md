@@ -31,7 +31,7 @@ Too many books. Too many books. Too many books, too many books.
 
 When we go to a library to research something (surely somebody still
 does this), we only request the books we need as we need them, and until
-we do, they remain stored safely on thier shelves out of everyone's way.
+we do, they remain stored safely on their shelves out of everyone's way.
 
 Similarly, when working with server data, we often want to just request
 the data we need as we need it.
