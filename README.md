@@ -17,13 +17,23 @@ Now go to `https://api.github.com/users/learn-co-curriculum/repos`.  Here we are
 
 ### Viewing the request and response
 
-Our browser allows us to view the request and response - and it's time for us to familiarize ourselves with this.  Open the developer tools by going to the toolbar at the top of Google Chrome.  You want to select "View", then "Developer", then "Javascript Console".  You may also open the console by pressing Cmd+Shift+c (on a Mac) or Ctl+Shift+C (on a PC).  When you open the console, you may see either "Elements" or "Console" highlighted at the top of the developer tools.  Look to the right to find a tab labeled "Network", and click on that.  The network panel likely looks pretty sparse right now, but refresh (by pressing cmd+r or ctl+r) the page, and you'll see some changes.  You'll see a list of requests that your browser makes when you visit the url `https://api.github.com/users/learn-co-curriculum/repos`.  You can even click on a request, on one of the requests, listed under the "Name" column, which will open up a panel displaying information about the request in the "Headers" tab.  Information about the response can be viewed by clicking on either the "Preview" or "Response" tabs.
+Our browser allows us to view the request and response - and it's time for us to familiarize ourselves with this.  Open the developer tools by going to the toolbar at the top of Google Chrome.  You want to select "View", then "Developer", then "Developer Tools". 
 
-Ok, so there it is.  Visual proof of the request and response cycle.
+![developer-tools](./developer-tools.png) 
+
+You may also open the console by pressing Cmd+Shift+c (on a Mac) or Ctl+Shift+C (on a PC).  When you open the console, you may see either "Elements" or "Console" highlighted at the top of the developer tools.  Look to the right to find a tab labeled "Network", and click on that.  The network panel likely looks pretty sparse right now, but refresh (by pressing cmd+r or ctl+r) the page, and you'll see some changes.  
+
+![network-tab](./network-tab.png) 
+
+You'll see a table displaying the requests that your browser makes when you visit the url `https://api.github.com/users/learn-co-curriculum/repos`.  You can even click on a request, on one of the requests, listed under the "Name" column, which will open up a panel displaying information about the request in the "Headers" tab.  Information about the response can be viewed by clicking on either the "Preview" or "Response" tabs.
+
+![](./console-request.png)
+
+Those listed requests are for a JavaScript file that apparently the website needs, as well as a css, png, and favicon.ico file.  So after our initial file loads, the HTMl file requests these other files. So there it is.  A mechanism to see information about the request and response cycle through our console.
 
 ### Requests and Responses through JavaScript
 
-So just as we can make requests, and receive responses by entering a url into our browser, we can also make requests and responses through our JavaScript code.  Let's see that.  The following code **will not work** if entered from the `https://api.github.com/users/learn-co-curriculum/repos`, so let's move to a different website, or better yet just open the `index.html` file provided in this repository in Chrome.
+So just as we can make requests, and receive responses by entering a url into our browser, we can also make requests and responses through our JavaScript code.  Let's see that.  The following code below **will not work** if entered from the `https://api.github.com/users/learn-co-curriculum/repos`, so let's move to a different website, or better yet just open the `index.html` file provided in this repository in Chrome.
 
 Once you do that, move to the "Console" tab in your developer tools.  Then type in the following code:
 
@@ -35,11 +45,19 @@ Once you do that, move to the "Console" tab in your developer tools.  Then type 
 
 Ok, so what we just did is find another mechanism to make a request, this time using JavaScript.  We first initialized a new `XMLHttpRequest` object.  Then we use the `open` method to specify the type of request we wish to send.  We specified a "GET" request, as we are retrieving information about repositories (if we were adding a new repository we would use a POST request), and we specified the url we are making the GET request to.  In the next line we use the `send` method to officially make the request.  
 
-Go back to the Network tab.  There you will find the request that we just made.  We also see the JSON response.
+So now open the Developer Tools in this tab, and navigate to the Network tab.  
+
+![](./xhr-request-tools.png)
+
+
+If you click on the item named repos, more information will be displayed.  There you will find the request that we just made.  We also see the JSON response.
+
+
+![](./response-data.png)
 
 ### Tying this to event listeners
 
-Now we have seen how to make a request and receive a response using JavaScript.  It happened, the visual evidence is right there in your Developer Tools panel.  This is powerful as we can now listen for events to happen in the console, we can make a request for information online, or update our webpage, and our user would never have to refresh the page.
+We have just seen how to make a request and receive a response using JavaScript.  It happened, the visual evidence is right there in your Developer Tools panel.  This is powerful as we can now listen for events to happen in the console, we can make a request for information online, or update our webpage, and our user would never have to refresh the page.
 
 Unfortunately, right now our user *would* have to open up his developer tools, and go to his network panel to see any of that information.  Not exactly a seamless user experience.  Instead, let's again make the request from the console, and this time listen for an event indicating when our browser received the JSON response.  When that response occurs, we can attach the data to our DOM.  We update our JavaScript code to the following:
 
@@ -72,7 +90,6 @@ typeof(response)
 
 response
 
-
 "[
   {
     "id": 87200169,
@@ -85,7 +102,7 @@ response
 
 ```
 
-Ok, so there is quite a lot of text there.  But the main point is that the `responseText` **is a string**.  It looks like a JavaScript array that contains objects, but it is in fact a string.  And yes, it would be nice if it were that array, but it's a string.  Think about it, the Internet has to send back data in the lowest common denominator.  And whether it is sending back HTML or JSON data, it is sending back a string.  Getting data out of a string shaped like an object isn't fun.  Let's convert this into an object.
+Ok, so there is quite a lot of text there.  But the main point is that the `responseText` **is a string**.  It looks like a JavaScript array that contains objects, but those quotation marks on either end mean that it is in fact a string.  But wouldn't it be nice if it were an array.  Think about it, the Internet has to send back data in the lowest common denominator.  And whether it is sending back HTML or JSON data, it is sending back a string.  Navigating through data in a string shaped like an object isn't fun.  So let's convert this into an object.
 
 ```js
 JSON.parse(response)
