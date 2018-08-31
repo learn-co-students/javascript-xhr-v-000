@@ -1,5 +1,4 @@
-JavaScript XHR
----
+## JavaScript XHR
 
 ## Objectives
 
@@ -31,7 +30,7 @@ Too many books. Too many books. Too many books, too many books.
 
 When we go to a library to research something (surely somebody still
 does this), we only request the books we need as we need them, and until
-we do, they remain stored safely on thier shelves out of everyone's way.
+we do, they remain stored safely on their shelves out of everyone's way.
 
 Similarly, when working with server data, we often want to just request
 the data we need as we need it.
@@ -61,7 +60,7 @@ provided `index.html` and `index.js` files. A basic HTML structure is
 already in place.
 
 Getting data from a server via XHR happens in two stages. First, we make
-a *request*, and then we listen for, and handle, the *response*.
+a _request_, and then we listen for, and handle, the _response_.
 
 ### Creating the XHR Request
 
@@ -89,9 +88,9 @@ request.
 
 ```js
 function getRepositories() {
-  const req = new XMLHttpRequest()
-  req.open("GET", 'https://api.github.com/users/octocat/repos')
-  req.send()
+  const req = new XMLHttpRequest();
+  req.open("GET", "https://api.github.com/users/octocat/repos");
+  req.send();
 }
 ```
 
@@ -147,20 +146,20 @@ capture this response so we can do something with it.
 The second part of XHR is handling the response once we've made the
 request. We do this by defining an event listener on the request to
 listen for the `load` event, which will tell us that the request is
-complete. We'll give this listener a *callback function*, which is
+complete. We'll give this listener a _callback function_, which is
 simply a function that will get called when the event fires.
 
 ```js
 function showRepositories(event, data) {
   //this is set to the XMLHttpRequest object that fired the event
-  console.log(this.responseText)
+  console.log(this.responseText);
 }
 
 function getRepositories() {
-  const req = new XMLHttpRequest()
+  const req = new XMLHttpRequest();
   req.addEventListener("load", showRepositories);
-  req.open("GET", 'https://api.github.com/users/octocat/repos')
-  req.send()
+  req.open("GET", "https://api.github.com/users/octocat/repos");
+  req.send();
 }
 ```
 
@@ -191,13 +190,13 @@ Then let's start by simply listing the repository names.
 
 ```js
 function showRepositories(event, data) {
-  console.log(this.responseText)
-  let repoList = "<ul>"
-  for(var i=0;i < this.responseText.length; i++) {
-    repoList += "<li>" + this.responseText[i]["name"] + "</li>"
+  console.log(this.responseText);
+  let repoList = "<ul>";
+  for (var i = 0; i < this.responseText.length; i++) {
+    repoList += "<li>" + this.responseText[i]["name"] + "</li>";
   }
-  repoList += "</ul>"
-  document.getElementById("repositories").innerHTML = repoList
+  repoList += "</ul>";
+  document.getElementById("repositories").innerHTML = repoList;
 }
 ```
 
@@ -211,8 +210,8 @@ out. What happened?
 
 The key lies in the `responseText` property. We can look at it and
 understand that it's JSON, but to our JavaScript interpreter, it's just
-a string of text. And while we *know* that all JSON is just a string of
-text, we have to *tell* JavaScript that it's working with JSON.
+a string of text. And while we _know_ that all JSON is just a string of
+text, we have to _tell_ JavaScript that it's working with JSON.
 
 This might seem annoying, but honestly, if a computer can't
 innately know that some text is really JSON, it also probably can't become
@@ -225,10 +224,12 @@ it with [`JSON.parse`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/R
 
 ```js
 function showRepositories(event, data) {
-  var repos = JSON.parse(this.responseText)
-  console.log(repos)
-  const repoList = `<ul>${repos.map(r => '<li>' + r.name + '</li>').join('')}</ul>`
-  document.getElementById("repositories").innerHTML = repoList
+  var repos = JSON.parse(this.responseText);
+  console.log(repos);
+  const repoList = `<ul>${repos
+    .map(r => "<li>" + r.name + "</li>")
+    .join("")}</ul>`;
+  document.getElementById("repositories").innerHTML = repoList;
 }
 ```
 
@@ -258,10 +259,19 @@ We'll start by adding the link to our repository output.
 
 ```js
 function showRepositories(event, data) {
-  var repos = JSON.parse(this.responseText)
-  console.log(repos)
-  const repoList = `<ul>${repos.map(r => '<li>' + r.name + ' - <a href="#" data-repo="' + r.name + '" onclick="getCommits(this)">Get Commits</a></li>').join('')}</ul>`
-  document.getElementById("repositories").innerHTML = repoList
+  var repos = JSON.parse(this.responseText);
+  console.log(repos);
+  const repoList = `<ul>${repos
+    .map(
+      r =>
+        "<li>" +
+        r.name +
+        ' - <a href="#" data-repo="' +
+        r.name +
+        '" onclick="getCommits(this)">Get Commits</a></li>'
+    )
+    .join("")}</ul>`;
+  document.getElementById("repositories").innerHTML = repoList;
 }
 ```
 
@@ -280,11 +290,11 @@ about just making another XHR request to Github.
 
 ```js
 function getCommits(el) {
-  const name = el.dataset.repo
-  const req = new XMLHttpRequest()
-  req.addEventListener("load", showCommits)
-  req.open("GET", 'https://api.github.com/repos/octocat/' + name + '/commits')
-  req.send()
+  const name = el.dataset.repo;
+  const req = new XMLHttpRequest();
+  req.addEventListener("load", showCommits);
+  req.open("GET", "https://api.github.com/repos/octocat/" + name + "/commits");
+  req.send();
 }
 ```
 
@@ -307,9 +317,18 @@ what values we want to pull out, then display them on the page.
 
 ```js
 function showCommits() {
-  const commits = JSON.parse(this.responseText)
-  const commitsList = `<ul>${commits.map(commit => '<li><strong>' + commit.author.login + '</strong> - ' + commit.commit.message + '</li>').join('')}</ul>`
-  document.getElementById("commits").innerHTML = commitsList
+  const commits = JSON.parse(this.responseText);
+  const commitsList = `<ul>${commits
+    .map(
+      commit =>
+        "<li><strong>" +
+        commit.author.login +
+        "</strong> - " +
+        commit.commit.message +
+        "</li>"
+    )
+    .join("")}</ul>`;
+  document.getElementById("commits").innerHTML = commitsList;
 }
 ```
 
